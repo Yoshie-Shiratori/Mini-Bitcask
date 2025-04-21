@@ -1,0 +1,17 @@
+target/
+
+.env
+
+migrations/
+
+.DS_Store
+diesel.toml
+
+.idea/
+.vscode/
+
+*.log
+*.bak
+*.swp
+*.swo
+Cargo.lock
