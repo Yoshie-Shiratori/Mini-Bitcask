@@ -10,7 +10,7 @@ const BINCODE_CONFIG: Configuration = config::standard(); // Standard bincode co
 /// Structure representing a record in the storage (key-value pair)
 #[derive(Serialize, Deserialize, Debug, PartialEq, Encode, Decode)]
 pub struct Record {
-    pub key: String,  // Key of the record
+    pub key: String,   // Key of the record
     pub value: String, // Value associated with the key
 }
 
@@ -18,13 +18,13 @@ pub struct Record {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Encode, Decode)]
 pub enum WalOperation {
     Set { key: String, value: String }, // Set operation (key-value pair)
-    Delete { key: String }, // Delete operation (by key)
+    Delete { key: String },             // Delete operation (by key)
 }
 
 /// Structure representing a segment (a file) where records are stored
 pub struct Segment {
-    file: File,             // File where the records are written
-    write_offset: u64,      // Current position to write in the file
+    file: File,        // File where the records are written
+    write_offset: u64, // Current position to write in the file
 }
 
 impl Segment {
@@ -33,7 +33,7 @@ impl Segment {
         let file = OpenOptions::new()
             .create(true) // Create the file if it doesn't exist
             .append(true) // Allow appending data to the file
-            .read(true)   // Allow reading from the file
+            .read(true) // Allow reading from the file
             .open(path)?; // Open the file at the given path
 
         let write_offset = file.metadata()?.len(); // Get the current length of the file (write position)
@@ -112,8 +112,8 @@ impl WalSegment {
     pub fn new(path: &Path) -> Result<Self, Error> {
         let file = OpenOptions::new()
             .create(true) // Create the file if it doesn't exist
-            .read(true)   // Allow reading from the file
-            .write(true)  // Allow writing to the file
+            .read(true) // Allow reading from the file
+            .write(true) // Allow writing to the file
             .open(path)?; // Open the file at the given path
         Ok(Self { file }) // Return the WAL segment
     }
@@ -147,7 +147,7 @@ impl WalSegment {
                     operations.push(op); // Add the operation to the list
                 }
                 Err(e) if e.kind() == ErrorKind::UnexpectedEof => break, // Break if EOF is reached
-                Err(e) => return Err(e), // Propagate other errors
+                Err(e) => return Err(e),                                 // Propagate other errors
             }
         }
 

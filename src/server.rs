@@ -1,12 +1,14 @@
 use crate::storage::Storage;
 use std::sync::{Arc, Mutex};
-use tokio::net::{TcpListener, TcpStream};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::net::{TcpListener, TcpStream};
 
 /// Start the TCP server
 pub async fn run_server(addr: &str) -> Result<(), std::io::Error> {
     let listener = TcpListener::bind(addr).await?; // Create a listener on the specified address
-    let storage = Arc::new(Mutex::new(Storage::new(std::path::Path::new("./db")).unwrap())); // Data storage
+    let storage = Arc::new(Mutex::new(
+        Storage::new(std::path::Path::new("./db")).unwrap(),
+    )); // Data storage
 
     println!("Server listening on {}", addr);
 
@@ -35,7 +37,7 @@ async fn handle_client(mut stream: TcpStream, storage: Arc<Mutex<Storage>>) {
 
                 // Process the request
                 let response = process_request(&request, &storage);
-                
+
                 // Send the response back to the client
                 if let Err(e) = stream.write_all(response.as_bytes()).await {
                     eprintln!("Failed to send response: {}", e);

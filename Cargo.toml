@@ -8,3 +8,4 @@ bincode = "2"
 serde = {version = "1", features = ["derive"]}
 tokio = {version = "1", features = ["full"]}
 console-subscriber = "0.1"
+clap = "4.5.37"
