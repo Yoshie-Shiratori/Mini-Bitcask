@@ -1,29 +1,20 @@
-mod segment;
 mod index;
+mod segment;
 mod storage;
 
-use std::path::Path;
 use crate::storage::Storage;
+use std::path::Path;
 
 fn main() {
-    let path = Path::new("mydata.db");
-    
-    let mut storage = Storage::new(path).expect("Failed to create storage");
+    let path = Path::new("data.db");
+    let mut storage = Storage::new(path).unwrap();
 
-    let key = "greeting".to_string();
-    let value = b"hello world".to_vec();
+    storage.begin_transaction().unwrap();
+    storage.set("user1", "data1").unwrap();
+    storage.set("user2", "data2").unwrap();
+    storage.commit().unwrap();
 
-    // Put key-value into storage
-    storage.put(key.clone(), value.clone()).expect("Put failed");
+    println!("{:?}", storage.get("user1")); 
 
-    // Get value back
-    match storage.get(&key).expect("Get failed") {
-        Some(retrieved) => {
-            println!("Got value: {}", String::from_utf8_lossy(&retrieved));
-        }
-        None => {
-            println!("Key not found");
-        }
-    }
+    storage.delete("user2").unwrap();
 }
-
